@@ -13,7 +13,7 @@ Prepared 22 October 2026 from the supplied HTML. Planned domain: `homacalculator
 | Fake EHR success alert and unsubstantiated CE/HIPAA wording | Replaced with real clipboard/print actions; removed claims |
 | Invalid nested H1/H2 and limited topic coverage | One H1 per page; dedicated calculator routes and supporting articles |
 | Missing metadata and crawl discovery | Unique titles/descriptions, canonical URLs, sitemap and robots file |
-| Sparse FAQ coverage | 33 original answers mapped to common search themes and linked sources |
+| Sparse FAQ coverage | 45 original answers mapped to common search themes and linked sources |
 | External references lacked consistent link policy | Requested nofollow plus noopener/noreferrer for every external reference |
 | No domain or author/reviewer evidence | Planned domain configured; honest editorial status, no invented medical credentials |
 
@@ -31,6 +31,9 @@ Prepared 22 October 2026 from the supplied HTML. Planned domain: `homacalculator
 | `/calculators/insulin-unit-converter/` | Insulin pmol/L to µIU/mL | 6 vs 6.945 |
 | `/calculators/c-peptide-unit-converter/` | C-peptide unit conversion | ng/mL, nmol/L, pmol/L |
 | `/calculators/hba1c-unit-converter/` | A1c % to mmol/mol | NGSP/IFCC equation |
+| `/calculators/bmi-calculator/` | Adult BMI in kg/lb and cm/inches | Screening limits, adult age scope |
+| `/calculators/waist-to-height-ratio-calculator/` | Waist-to-height ratio | Measurement technique, consistent units |
+| `/guides/` | Learning library | Normal HOMA ranges, test comparison, preparation |
 | `/faq/` | Question-led informational searches | Fasting, PCOS, symptoms, model limits |
 | `/interpretation/` | Understand calculator results | Sampling, comparison, diagnosis limits |
 
@@ -62,3 +65,11 @@ External references use nofollow because this was explicitly requested. Google d
 8. Check mobile usability, actual field performance and Search Console query reports after traffic arrives. Use observed queries to prioritize further FAQs.
 
 No messages, directory submissions, external backlinks or public-domain configuration were performed. No rankings, search traffic or rich-result display are guaranteed.
+
+## Continued expansion
+
+The site now has 23 content pages, ten tools, 45 FAQs and 15 references. Three new guides answer the range, test-comparison and fasting-preparation intents in depth, with contextual links to tools and sources. Guide pages include linked tables of contents and hierarchical breadcrumb data.
+
+Form submission is disabled until JavaScript initializes, preventing the browser’s default GET submission from exposing lab values in URLs when scripting is off. FAQ hashes reveal their target even when a search or category filter would hide it. Public and private build modes are tested independently, and public builds require an HTTPS canonical origin.
+
+Validation: 22 automated math/content/build checks and 11 browser checks passed. Browser checks include automated WCAG 2 A/AA rules on representative mobile pages; this is not a complete accessibility certification.

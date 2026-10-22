@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {positive,glucoseMg,insulinU,homa,quicki,tyg,a1cToEag,eagToA1c,a1cToIfcc,ifccToA1c} from '../src/calculations.mjs';
+import {positive,glucoseMg,insulinU,homa,quicki,tyg,a1cToEag,eagToA1c,a1cToIfcc,ifccToA1c,lengthCm,weightKg,bmi,waistHeightRatio} from '../src/calculations.mjs';
 const near=(a,b,tolerance=1e-9)=>assert.ok(Math.abs(a-b)<tolerance,`${a} ≠ ${b}`);
 test('HOMA1 matches a hand-worked example',()=>{const r=homa(90,10);near(r.ir,20/9);near(r.beta,400/3);near(r.sensitivity,45);});
 test('glucose and insulin SI inputs retain the same HOMA1 result',()=>{near(homa(glucoseMg(5,'mmol'),insulinU(69.45,'pmol')).ir,homa(90,10).ir);near(insulinU(60,'pmol',6),10);});
@@ -12,3 +12,8 @@ test('ADAG conversion is reversible and matches the 7% example',()=>{near(a1cToE
 test('ADAG educational range is enforced in both directions',()=>{assert.throws(()=>a1cToEag(3));assert.throws(()=>a1cToEag(16));assert.throws(()=>eagToA1c(1));});
 test('NGSP master equation round trip',()=>{near(a1cToIfcc(7),52.9951902055094,1e-8);near(ifccToA1c(a1cToIfcc(7)),7);});
 test('empty, invalid, zero, negative and infinite inputs fail',()=>{for(const value of ['',null,undefined,0,-1,'abc',NaN,Infinity])assert.throws(()=>positive(value));});
+
+test('BMI uses meters and exact imperial conversion constants',()=>{near(bmi(70,175),22.857142857142858);near(bmi(weightKg(70/0.45359237,'lb'),lengthCm(175/2.54,'inch')),bmi(70,175));});
+test('waist-to-height ratio is dimensionless and handles imperial lengths',()=>{near(waistHeightRatio(85,170),.5);near(waistHeightRatio(lengthCm(34,'inch'),lengthCm(68,'inch')),.5);});
+test('unsupported units and non-numeric types cannot be silently reinterpreted',()=>{for(const fn of [()=>glucoseMg(90,'mmol/mol'),()=>insulinU(10,'ng'),()=>lengthCm(175,'feet'),()=>weightKg(70,'stone'),()=>positive(true),()=>positive([])])assert.throws(fn);});
+test('overflow and underflow do not produce numeric-looking scores',()=>{assert.throws(()=>homa(1e308,1e308));assert.throws(()=>homa(1e-300,1e-300));assert.throws(()=>bmi(70,1e-300));assert.throws(()=>glucoseMg(1e308,'mmol'));});

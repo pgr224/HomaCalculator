@@ -34,3 +34,12 @@ Search results surfaced normal-range questions, model confusion, fasting prepara
 ## Follow-up after launch
 
 Use the verified domain's actual Search Console queries to choose which answers need expansion. If live Google PAA/PASF research is later collected, record query, country/language, device and collection date. Panels vary by those conditions and do not provide search-volume estimates.
+
+## Continued expansion sources
+
+- [CDC adult BMI calculator](https://www.cdc.gov/bmi/adult-calculator/): adult age scope, screening role and limits.
+- [NICE NG246 measurement guidance](https://www.nice.org.uk/guidance/ng246/chapter/Identifying-and-assessing-overweight-obesity-and-central-adiposity): waist-to-height equation and waist measurement method.
+- [MedlinePlus insulin test](https://medlineplus.gov/lab-tests/insulin-in-blood-test/): preparation and discussion of medication effects.
+- [MedlinePlus blood-test fasting](https://medlineplus.gov/lab-tests/fasting-for-a-blood-test/): water, coffee and interrupted-fast questions.
+
+New searches covered HOMA normal ranges, insulin versus HbA1c and adult anthropometric equations. As before, no claim is made that an authenticated Google PAA/PASF panel was captured.

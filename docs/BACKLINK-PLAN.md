@@ -6,7 +6,7 @@ Prepared for the planned public domain. No outreach or external posting has been
 
 - Permanent calculator URLs with readable formulas and worked examples.
 - A HOMA1/HOMA2 comparison that avoids mislabelled calculator results.
-- 33 reference-linked FAQ answers with direct answer links.
+- 45 reference-linked FAQ answers with direct answer links.
 - A reference library with citation-copy and clean-link buttons.
 - Local calculation with no lab values in share URLs.
 
