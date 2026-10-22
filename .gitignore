@@ -1,0 +1,6 @@
+dist/
+node_modules/
+*.tar.gz
+.DS_Store
+test-results/
+playwright-report/

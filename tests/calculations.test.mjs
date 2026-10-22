@@ -1,0 +1,14 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {positive,glucoseMg,insulinU,homa,quicki,tyg,a1cToEag,eagToA1c,a1cToIfcc,ifccToA1c} from '../src/calculations.mjs';
+const near=(a,b,tolerance=1e-9)=>assert.ok(Math.abs(a-b)<tolerance,`${a} ≠ ${b}`);
+test('HOMA1 matches a hand-worked example',()=>{const r=homa(90,10);near(r.ir,20/9);near(r.beta,400/3);near(r.sensitivity,45);});
+test('glucose and insulin SI inputs retain the same HOMA1 result',()=>{near(homa(glucoseMg(5,'mmol'),insulinU(69.45,'pmol')).ir,homa(90,10).ir);near(insulinU(60,'pmol',6),10);});
+test('HOMA beta estimate is withheld at and below the singularity',()=>{assert.equal(homa(63,10).beta,null);assert.equal(homa(50,10).beta,null);assert.ok(homa(64,10).beta>0);});
+test('QUICKI uses base-10 logs',()=>near(quicki(90,10),0.33849624626442276,1e-8));
+test('QUICKI rejects zero or negative log denominator',()=>{assert.throws(()=>quicki(.1,.1));assert.throws(()=>quicki(1,1));});
+test('TyG keeps division inside the natural logarithm',()=>{near(tyg(90,150),Math.log(6750));assert.ok(Math.abs(tyg(90,150)-Math.log(13500)/2)>4);});
+test('ADAG conversion is reversible and matches the 7% example',()=>{near(a1cToEag(7),154.2);near(eagToA1c(154.2),7);});
+test('ADAG educational range is enforced in both directions',()=>{assert.throws(()=>a1cToEag(3));assert.throws(()=>a1cToEag(16));assert.throws(()=>eagToA1c(1));});
+test('NGSP master equation round trip',()=>{near(a1cToIfcc(7),52.9951902055094,1e-8);near(ifccToA1c(a1cToIfcc(7)),7);});
+test('empty, invalid, zero, negative and infinite inputs fail',()=>{for(const value of ['',null,undefined,0,-1,'abc',NaN,Infinity])assert.throws(()=>positive(value));});
