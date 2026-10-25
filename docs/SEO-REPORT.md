@@ -73,3 +73,4 @@ The site now has 23 content pages, ten tools, 45 FAQs and 15 references. Three n
 Form submission is disabled until JavaScript initializes, preventing the browser’s default GET submission from exposing lab values in URLs when scripting is off. FAQ hashes reveal their target even when a search or category filter would hide it. Public and private build modes are tested independently, and public builds require an HTTPS canonical origin.
 
 Validation: 22 automated math/content/build checks and 11 browser checks passed. Browser checks include automated WCAG 2 A/AA rules on representative mobile pages; this is not a complete accessibility certification.
+    

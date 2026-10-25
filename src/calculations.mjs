@@ -1,3 +1,5 @@
+import { calculateHoma2 } from './homa2.mjs';
+
 export const GLUCOSE_FACTOR = 18;
 export const CPEPTIDE_FACTOR = 0.331;
 export function positive(value, label = 'Value') {
@@ -19,9 +21,8 @@ export function weightKg(value, unit = 'kg') { return checked(positive(value, 'W
 export function bmi(weight, heightCm) { return checked(positive(weight, 'Weight') / (positive(heightCm, 'Height') / 100) ** 2); }
 export function waistHeightRatio(waistCm, heightCm) { return checked(positive(waistCm, 'Waist') / positive(heightCm, 'Height')); }
 export function homa(glucose, insulin) {
-  const g = positive(glucose, 'Glucose'), i = positive(insulin, 'Insulin');
-  const ir = checked(g * i / 405);
-  return { ir, beta: g > 63 ? checked(360 * i / (g - 63)) : null, sensitivity: checked(100 / ir) };
+  // Retain the form's mg/dL and µIU/mL contract; the HOMA2 core uses SI.
+  return calculateHoma2(positive(glucose, 'Glucose') / GLUCOSE_FACTOR, positive(insulin, 'Insulin') * 6.9);
 }
 export function quicki(glucose, insulin) {
   const denominator = Math.log10(positive(glucose, 'Glucose')) + Math.log10(positive(insulin, 'Insulin'));

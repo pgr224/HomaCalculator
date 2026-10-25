@@ -26,15 +26,15 @@ if(form){
    if($('#acute')?.checked)throw new Error('These fasting indices are not appropriate for an acute illness or unstable sampling condition.');
    if($('#exogenous')?.checked)throw new Error('Injected insulin makes these insulin-based estimates unsuitable here. Discuss assessment with your clinician.');
    if($('#adult')&&!$('#adult').checked)throw new Error('Confirm that this measurement is for an adult age 20 or older.');
-   const factor=Number(value('factor')||6.945);
+   const factor=Number(value('factor')||(id==='homa'?6.9:6.945));
    const g=$('#glucose')?glucoseMg(value('glucose'),unit('glucose')):null;
    const i=$('#insulin')?insulinU(value('insulin'),unit('insulin'),factor):null;
    let rows=[],note='',inputText='';
-   if(['homa','quicki','tyg'].includes(id)&&g>600)throw new Error('Check the glucose value and selected unit. This fasting tool accepts glucose up to 600 mg/dL.');
-   if(['homa','quicki'].includes(id)&&i>1000)throw new Error('Check the insulin value and selected unit. This tool accepts insulin up to 1,000 µIU/mL.');
+   if(['quicki','tyg'].includes(id)&&g>600)throw new Error('Check the glucose value and selected unit. This fasting tool accepts glucose up to 600 mg/dL.');
+   if(id==='quicki'&&i>1000)throw new Error('Check the insulin value and selected unit. This tool accepts insulin up to 1,000 µIU/mL.');
    if(id==='homa'){
-    const r=homa(g,i);rows=[['HOMA1-IR',fmt(r.ir)],['HOMA1-%B',r.beta===null?'Not calculated':fmt(r.beta,1)+'%'],['Reciprocal sensitivity index',fmt(r.sensitivity,1)+'%']];
-    note=r.beta===null?'HOMA1-%B is unavailable at glucose ≤63 mg/dL. No diagnostic classification is assigned.':'These are HOMA1 approximations. No diagnostic classification is assigned.';
+    const r=homa(g,i);rows=[['HOMA2-IR',fmt(r.ir)],['HOMA2-%B',fmt(r.beta,1)+'%'],['HOMA2-%S',fmt(r.sensitivity,1)+'%']];
+    note='HOMA2 model estimates. No diagnostic classification is assigned.';
    }
    if(id==='quicki'){rows=[['QUICKI',fmt(quicki(g,i),4)]];note='Uses base-10 logarithms. Higher values generally indicate greater sensitivity; no diagnostic classification is assigned.';}
    if(['homa','quicki'].includes(id))inputText=`Fasting glucose: ${fmt(g,3)} mg/dL; fasting insulin: ${fmt(i,3)} µIU/mL. Insulin factor: ${factor} pmol/L per µIU/mL.`;
@@ -75,8 +75,8 @@ if(form){
    const p=document.createElement('p');p.className='small result-explanation';p.textContent=note;results.append(p);
    const input=document.createElement('p');input.className='small result-inputs';input.textContent=inputText;results.append(input);
    const title=document.querySelector('h1').textContent.trim();const canonical=document.querySelector('link[rel="canonical"]').href;
-   $('#report-heading').textContent=`${id==='homa'?'HOMA1 calculation':title} · ${new Intl.DateTimeFormat('en-GB').format(new Date())}`;
-   report=`EndoCalc — ${id==='homa'?'HOMA1 calculation':title}\n${inputText}\n${rows.map(([l,v])=>`${l}: ${v}`).join('\n')}\n${note}\nEducational estimate; review with a qualified clinician.\nMethod: ${id==='homa'?new URL('/calculators/homa-ir-calculator/',canonical).href:canonical}`;
+   $('#report-heading').textContent=`${id==='homa'?'HOMA2 calculation':title} · ${new Intl.DateTimeFormat('en-GB').format(new Date())}`;
+   report=`EndoCalc — ${id==='homa'?'HOMA2 calculation':title}\n${inputText}\n${rows.map(([l,v])=>`${l}: ${v}`).join('\n')}\n${note}\nEducational estimate; review with a qualified clinician.\nMethod: ${id==='homa'?new URL('/calculators/homa-ir-calculator/',canonical).href:canonical}`;
    $('#copy-result').disabled=false;$('#print-result').disabled=false;
   }catch(e){clear('Calculation unavailable. Review the input message.');error.textContent=e.message;error.hidden=false;}
  }
@@ -93,8 +93,9 @@ if(form){
    const factors=key==='insulin'?{u:1,pmol:1/Number(value('factor'))}:key==='cpeptide'?{ng:1,nmol:1/0.331,pmol:1/331}:key==='triglycerides'?{mg:1,mmol:88.57}:key==='height'||key==='waist'?{cm:1,inch:2.54}:key==='weight'?{kg:1,lb:0.45359237}:{mg:1,mmol:18};
    let converted;
    if(key==='a1c')converted=old==='percent'?(Number(el.value)-2.152)/0.09148:Number(el.value)*0.09148+2.152;
+   else if(id==='homa'&&key==='insulin')converted=next==='u'?Number(el.value)/6.9:Number(el.value)*6.9;
    else converted=Number(el.value)*factors[old]/factors[next];
-   el.value=Number(converted.toPrecision(12));
+   el.value=id==='homa'?converted:Number(converted.toPrecision(12));
   });
  });
  function toggleAverage(){if(id!=='eag')return;const reverse=value('direction')==='eag';$('#average-fields').hidden=!reverse;$('#average').required=reverse;$('#a1c').closest('.field').hidden=reverse;$('#a1c').required=!reverse;}
