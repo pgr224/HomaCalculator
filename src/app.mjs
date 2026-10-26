@@ -76,7 +76,7 @@ if(form){
    const input=document.createElement('p');input.className='small result-inputs';input.textContent=inputText;results.append(input);
    const title=document.querySelector('h1').textContent.trim();const canonical=document.querySelector('link[rel="canonical"]').href;
    $('#report-heading').textContent=`${id==='homa'?'HOMA2 calculation':title} · ${new Intl.DateTimeFormat('en-GB').format(new Date())}`;
-   report=`EndoCalc — ${id==='homa'?'HOMA2 calculation':title}\n${inputText}\n${rows.map(([l,v])=>`${l}: ${v}`).join('\n')}\n${note}\nEducational estimate; review with a qualified clinician.\nMethod: ${id==='homa'?new URL('/calculators/homa-ir-calculator/',canonical).href:canonical}`;
+   report=`HomaCalc — ${id==='homa'?'HOMA2 calculation':title}\n${inputText}\n${rows.map(([l,v])=>`${l}: ${v}`).join('\n')}\n${note}\nEducational estimate; review with a qualified clinician.\nMethod: ${id==='homa'?new URL('/calculators/homa-ir-calculator/',canonical).href:canonical}`;
    $('#copy-result').disabled=false;$('#print-result').disabled=false;
   }catch(e){clear('Calculation unavailable. Review the input message.');error.textContent=e.message;error.hidden=false;}
  }
@@ -124,7 +124,7 @@ function revealHash(){const target=document.getElementById(decodeURIComponent(lo
 try{revealHash();}catch{}window.addEventListener('hashchange',()=>{try{revealHash();}catch{}});
 const citationTool=$('#citation-tool');
 if(citationTool){const origin=new URL(document.querySelector('link[rel="canonical"]').href).origin;const text=$('#citation-text');
- const update=()=>{text.textContent=`EndoCalc. ${citationTool.selectedOptions[0].textContent}. ${origin}${citationTool.value} Accessed ${new Intl.DateTimeFormat('en-GB',{day:'numeric',month:'long',year:'numeric'}).format(new Date())}.`;};
+ const update=()=>{text.textContent=`HomaCalc. ${citationTool.selectedOptions[0].textContent}. ${origin}${citationTool.value} Accessed ${new Intl.DateTimeFormat('en-GB',{day:'numeric',month:'long',year:'numeric'}).format(new Date())}.`;};
  citationTool.addEventListener('change',update);update();
  $('#copy-citation').addEventListener('click',()=>copy(text.textContent,$('#citation-status')));
  $('#copy-link').addEventListener('click',()=>copy(origin+citationTool.value,$('#citation-status')));

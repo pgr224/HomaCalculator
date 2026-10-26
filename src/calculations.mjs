@@ -15,7 +15,7 @@ function checked(value) {
   return value;
 }
 export function glucoseMg(value, unit = 'mg') { return checked(positive(value, 'Glucose') * unitFactor(unit, {mg: 1, mmol: GLUCOSE_FACTOR})); }
-export function insulinU(value, unit = 'u', factor = 6.945) { return checked(positive(value, 'Insulin') / unitFactor(unit, {u: 1, pmol: positive(factor, 'Conversion factor')})); }
+export function insulinU(value, unit = 'u', factor = 6.9) { return checked(positive(value, 'Insulin') / unitFactor(unit, {u: 1, pmol: positive(factor, 'Conversion factor')})); }
 export function lengthCm(value, unit = 'cm') { return checked(positive(value, 'Length') * unitFactor(unit, {cm: 1, inch: 2.54})); }
 export function weightKg(value, unit = 'kg') { return checked(positive(value, 'Weight') * unitFactor(unit, {kg: 1, lb: 0.45359237})); }
 export function bmi(weight, heightCm) { return checked(positive(weight, 'Weight') / (positive(heightCm, 'Height') / 100) ** 2); }
