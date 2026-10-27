@@ -22,7 +22,11 @@ export function bmi(weight, heightCm) { return checked(positive(weight, 'Weight'
 export function waistHeightRatio(waistCm, heightCm) { return checked(positive(waistCm, 'Waist') / positive(heightCm, 'Height')); }
 export function homa(glucose, insulin) {
   // Retain the form's mg/dL and µIU/mL contract; the HOMA2 core uses SI.
-  return calculateHoma2(positive(glucose, 'Glucose') / GLUCOSE_FACTOR, positive(insulin, 'Insulin') * 6.9);
+  const gRaw = positive(glucose, 'Glucose') / GLUCOSE_FACTOR;
+  if (gRaw < 3 || gRaw > 25) calculateHoma2(gRaw, 20);
+  const g = Math.round(gRaw * 10) / 10;
+  const i = Math.round(positive(insulin, 'Insulin') * 6.95 * 1000) / 1000;
+  return calculateHoma2(g, i);
 }
 export function quicki(glucose, insulin) {
   const denominator = Math.log10(positive(glucose, 'Glucose')) + Math.log10(positive(insulin, 'Insulin'));

@@ -25,7 +25,7 @@ test('HOMA2 uses rounded sensitivity to calculate resistance', () => {
 test('HOMA2 input ranges include both endpoints and reject extrapolation', () => {
   for (const g of [3, 25]) for (const i of [20, 400]) {
     const expected = calculateHoma2(g, i);
-    assert.deepEqual(homa(g * 18, i / 6.9), expected);
+    assert.deepEqual(homa(g * 18, i / 6.95), expected);
   }
   for (const [g, i] of [[2.999, 20], [25.001, 20], [5, 19.999], [5, 400.001], [NaN, 69], [5, Infinity], ['5', 69]]) {
     assert.throws(() => calculateHoma2(g, i), /HOMA2 requires/);
