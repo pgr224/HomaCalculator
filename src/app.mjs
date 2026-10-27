@@ -26,7 +26,7 @@ if(form){
    if($('#acute')?.checked)throw new Error('These fasting indices are not appropriate for an acute illness or unstable sampling condition.');
    if($('#exogenous')?.checked)throw new Error('Injected insulin makes these insulin-based estimates unsuitable here. Discuss assessment with your clinician.');
    if($('#adult')&&!$('#adult').checked)throw new Error('Confirm that this measurement is for an adult age 20 or older.');
-   const factor=Number(value('factor')||(id==='homa'?6.9:6.945));
+   const factor=Number(value('factor')||(id==='homa'?6.9:6));
    const g=$('#glucose')?glucoseMg(value('glucose'),unit('glucose')):null;
    const i=$('#insulin')?insulinU(value('insulin'),unit('insulin'),factor):null;
    let rows=[],note='',inputText='';
@@ -90,7 +90,7 @@ if(form){
   select.addEventListener('change',()=>{
    const key=select.dataset.value,el=$(`#${key}`),old=select.dataset.previous,next=select.value;select.dataset.previous=next;
    if(el.value===''||!Number.isFinite(Number(el.value)))return;
-   const factors=key==='insulin'?{u:1,pmol:1/Number(value('factor'))}:key==='cpeptide'?{ng:1,nmol:1/0.331,pmol:1/331}:key==='triglycerides'?{mg:1,mmol:88.57}:key==='height'||key==='waist'?{cm:1,inch:2.54}:key==='weight'?{kg:1,lb:0.45359237}:{mg:1,mmol:18};
+   const factors=key==='insulin'?{u:1,pmol:1/Number(value('factor')||6)}:key==='cpeptide'?{ng:1,nmol:1/0.331,pmol:1/331}:key==='triglycerides'?{mg:1,mmol:88.57}:key==='height'||key==='waist'?{cm:1,inch:2.54}:key==='weight'?{kg:1,lb:0.45359237}:{mg:1,mmol:18};
    let converted;
    if(key==='a1c')converted=old==='percent'?(Number(el.value)-2.152)/0.09148:Number(el.value)*0.09148+2.152;
    else if(id==='homa'&&key==='insulin')converted=next==='u'?Number(el.value)/6.9:Number(el.value)*6.9;
@@ -129,3 +129,16 @@ if(citationTool){const origin=new URL(document.querySelector('link[rel="canonica
  $('#copy-citation').addEventListener('click',()=>copy(text.textContent,$('#citation-status')));
  $('#copy-link').addEventListener('click',()=>copy(origin+citationTool.value,$('#citation-status')));
 }
+document.querySelectorAll('[data-dialog-open]').forEach(btn=>{
+ btn.addEventListener('click',()=>{
+  const id=btn.getAttribute('data-dialog-open');
+  const d=document.getElementById(id);
+  if(d&&typeof d.showModal==='function')d.showModal();
+ });
+});
+document.querySelectorAll('.dialog-close-btn').forEach(btn=>{
+ btn.addEventListener('click',()=>btn.closest('dialog')?.close());
+});
+document.querySelectorAll('dialog').forEach(d=>{
+ d.addEventListener('click',e=>{if(e.target===d)d.close();});
+});

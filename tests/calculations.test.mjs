@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import {positive,glucoseMg,insulinU,homa,quicki,tyg,a1cToEag,eagToA1c,a1cToIfcc,ifccToA1c,lengthCm,weightKg,bmi,waistHeightRatio} from '../src/calculations.mjs';
 const near=(a,b,tolerance=1e-9)=>assert.ok(Math.abs(a-b)<tolerance,`${a} ≠ ${b}`);
 test('HOMA2 reproduces the recovered insulin model example',()=>{const r=homa(90,10);near(r.ir,100/77.8);near(r.beta,113);near(r.sensitivity,77.8);});
-test('glucose and insulin SI inputs retain the same HOMA2 result',()=>{near(homa(glucoseMg(5,'mmol'),insulinU(69,'pmol',6.9)).ir,homa(90,10).ir);near(insulinU(60,'pmol',6),10);});
+test('glucose and insulin SI inputs retain the same HOMA2 result',()=>{near(homa(glucoseMg(5,'mmol'),insulinU(69,'pmol',6.9)).ir,homa(90,10).ir);near(insulinU(60,'pmol',6),10);near(insulinU(60,'pmol'),10);});
 test('HOMA2 beta is defined at 63 mg/dL and rejects glucose outside its domain',()=>{assert.ok(homa(63,10).beta>0);assert.throws(()=>homa(50,10),/3–25 mmol/);assert.ok(homa(64,10).beta>0);});
 test('QUICKI uses base-10 logs',()=>near(quicki(90,10),0.33849624626442276,1e-8));
 test('QUICKI rejects zero or negative log denominator',()=>{assert.throws(()=>quicki(.1,.1));assert.throws(()=>quicki(1,1));});

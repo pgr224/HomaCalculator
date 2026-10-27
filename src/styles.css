@@ -3,4 +3,22 @@
 @media(max-width:380px){.tool-grid{grid-template-columns:1fr}.hero-facts{flex-wrap:wrap}.form-actions{gap:7px}.form-actions .button{font-size:12px;padding:10px}.hero h1{font-size:35px}.panel{padding:18px}}
 @media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}@media print{header,footer,.breadcrumbs,.hero,.notice,.section-intro,.section-block,.page-hero,.result-actions,.form-actions,.menu-button,noscript,.result-panel>a,#copy-status{display:none!important}main{padding:0;max-width:none}body{background:white;color:#000}.calculator-layout{display:block}.panel{box-shadow:none;border:1px solid #bbb;margin:12px 0;break-inside:avoid}.result-panel{position:static;background:white}.input-panel{display:none}.result-panel:before{content:'EndoCalc · Educational calculation report';display:block;font-size:17px;font-weight:bold;margin-bottom:15px}.result-note{color:#000}.result-main strong{color:#000}.result-row strong{color:#000}#results{display:block}}
 .print-only{display:none}.article-toc{display:flex;align-items:stretch;flex-direction:column;gap:0;background:var(--pale);border:1px solid var(--line);border-radius:8px;padding:18px 22px;margin:28px 0}.article-toc strong{font-size:12px;margin-bottom:9px}.article-toc a{display:block;font-size:14px;padding:7px 0;border-bottom:0;text-decoration:underline}.article-section{scroll-margin-top:110px}
-@media print{.print-only{display:block!important;font-weight:650;font-size:16px}.result-panel:before{content:'HomaCalc · Educational calculation report'}.article-toc{display:none!important}}
+@media print{.print-only{display:block!important;font-weight:650;font-size:16px}.result-panel:before{content:'HomaCalc · Educational calculation report'}.article-toc{display:none!important}dialog.note-dialog{display:none!important}}
+dialog.note-dialog{border:1px solid var(--line);border-radius:var(--radius);padding:0;max-width:660px;width:calc(100% - 32px);background:white;color:var(--ink);box-shadow:0 20px 45px #00374828;margin:auto}
+dialog.note-dialog::backdrop{background:#112d3b8c;backdrop-filter:blur(3px)}
+.dialog-content{padding:28px;max-height:85vh;overflow-y:auto;display:flex;flex-direction:column}
+.dialog-header{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;border-bottom:1px solid var(--line);padding-bottom:16px;margin-bottom:20px}
+.dialog-header h2{font-size:22px;margin:6px 0 0}
+.dialog-close-btn{background:transparent;border:1px solid var(--line);border-radius:6px;width:32px;height:32px;display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--muted);cursor:pointer;line-height:1;padding:0;flex-shrink:0}
+.dialog-close-btn:hover{background:var(--pale);color:var(--primary);border-color:#bccfd6}
+.dialog-actions{display:flex;justify-content:flex-end;border-top:1px solid var(--line);padding-top:18px;margin-top:20px}
+.field-label-row{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+.field-label-row label{margin-bottom:0}
+.dialog-open-btn{background:transparent;border:0;cursor:pointer;padding:0;font:inherit}
+.badge-btn{font-size:11px;color:var(--primary);background:var(--pale);border:1px solid #cadfe4;border-radius:4px;padding:3px 8px;font-weight:600;display:inline-flex;align-items:center;gap:4px}
+.badge-btn:hover{background:#dceef0;border-color:var(--primary)}
+.inline-link-btn{color:var(--primary);text-decoration:underline;text-underline-offset:3px;font-size:12px;font-weight:600;display:inline-block;margin-left:6px}
+.inline-link-btn:hover{color:var(--teal)}
+.text-link-btn{color:var(--primary);text-decoration:underline;text-underline-offset:3px;font-size:13px;font-weight:600;display:inline;margin-left:4px}
+.text-link-btn:hover{color:var(--teal)}
+.factor-note{margin-top:20px}

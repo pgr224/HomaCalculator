@@ -23,7 +23,7 @@ Search results surfaced normal-range questions, model confusion, fasting prepara
 - [Zhou 2024](https://doi.org/10.1186/s12933-024-02313-z): explicit TyG ln[TG × glucose / 2] convention. This source was selected because historical TyG presentations vary; the calculator labels its exact convention and assigns no cutoff.
 - [Nathan 2008](https://pubmed.ncbi.nlm.nih.gov/18540046/): ADAG eAG equation.
 - [NGSP](https://ngsp.org/docs/IFCCstd.pdf): HbA1c unit conversion.
-- [Mayo C-peptide catalog](https://prd1.mayocliniclabs.com/test-catalog/Overview/800256): 0.331 C-peptide conversion and the 6.945 insulin factor. The form also offers 6.0 only when specified by the user's lab.
+- [CalcEngines Insulin Unit Converter](https://calcengines.com/medical/diabetes-glucose/insulin-unit-converter/) and [Mayo C-peptide catalog](https://prd1.mayocliniclabs.com/test-catalog/Overview/800256): 0.331 C-peptide conversion and modern 6.00 human insulin conversion factor (based on 1986 WHO standard 28.8 IU/mg, 5808 g/mol) replacing the obsolete 6.945 factor (1959 animal standard).
 - [NIDDK insulin resistance](https://www.niddk.nih.gov/health-information/diabetes/overview/what-is-diabetes/prediabetes-insulin-resistance): risk factors and patient context.
 - [NIDDK tests](https://www.niddk.nih.gov/health-information/diabetes/overview/tests-diagnosis): diagnostic-test context.
 - [NIDDK A1C](https://www.niddk.nih.gov/health-information/diagnostic-tests/a1c-test): preparation and measurement limits.
