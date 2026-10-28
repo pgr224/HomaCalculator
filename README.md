@@ -19,7 +19,7 @@ Browser tests currently use `/usr/bin/google-chrome`. On another system, update 
 ## Included
 
 - 23 static content pages; 10 calculator/conversion tools.
-- HOMA1-IR, HOMA1-%B and reciprocal sensitivity; QUICKI; TyG; HbA1c ↔ eAG; glucose, insulin, C-peptide and HbA1c unit conversions; adult BMI and waist-to-height ratio.
+- HOMA2-IR, HOMA2-%B and HOMA2-%S; QUICKI; TyG; HbA1c ↔ eAG; glucose, insulin, C-peptide and HbA1c unit conversions; adult BMI and waist-to-height ratio.
 - 45 original FAQ answers, search, category filters and permanent answer links.
 - HOMA1/HOMA2 comparison, interpretation and physiology guides, plus a learning library with three focused articles.
 - 15 research/official references with requested nofollow and new-tab protection.
@@ -53,7 +53,7 @@ The included private Sites deployment preserves owner-only access. Switching an 
 
 ## Medical scope
 
-The draft's HOMA1 formulas were incorrectly labeled as HOMA2. This version corrects that distinction, removes the fabricated C-peptide-to-insulin calculation, and links to official HOMA2 software. There is no universal HOMA cutoff, no medication recommendation engine and no claimed medical certification. The content has not undergone independent medical review.
+The browser calculator implements the nonlinear total-insulin model based on Oxford University’s HOMA2 equations and model data, checked against 441 cases from the Oxford validation workbook. HOMA1 equations remain explanatory comparisons only. The implementation accepts glucose and measured total insulin, with selectable conversion factors 6, 6.945 and 6.95 (default), and does not calculate HOMA2 from C-peptide. HomaCalc is independent of the University of Oxford. There is no universal HOMA cutoff, no medication recommendation engine and no claimed medical certification. The content has not undergone independent medical review.
 
 ## Continued expansion validation
 
