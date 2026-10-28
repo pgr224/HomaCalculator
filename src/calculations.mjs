@@ -20,12 +20,13 @@ export function lengthCm(value, unit = 'cm') { return checked(positive(value, 'L
 export function weightKg(value, unit = 'kg') { return checked(positive(value, 'Weight') * unitFactor(unit, {kg: 1, lb: 0.45359237})); }
 export function bmi(weight, heightCm) { return checked(positive(weight, 'Weight') / (positive(heightCm, 'Height') / 100) ** 2); }
 export function waistHeightRatio(waistCm, heightCm) { return checked(positive(waistCm, 'Waist') / positive(heightCm, 'Height')); }
-export function homa(glucose, insulin) {
-  // Retain the form's mg/dL and µIU/mL contract; the HOMA2 core uses SI.
+export function homa(glucose, insulin, factor = 6.95, insulinUnit = 'u') {
+  // Default to mg/dL and µIU/mL; accept pmol/L directly to avoid conversion round trips.
   const gRaw = positive(glucose, 'Glucose') / GLUCOSE_FACTOR;
   if (gRaw < 3 || gRaw > 25) calculateHoma2(gRaw, 20);
   const g = Math.round(gRaw * 10) / 10;
-  const i = Math.round(positive(insulin, 'Insulin') * 6.95 * 1000) / 1000;
+  const conversion = unitFactor(insulinUnit, {u: positive(factor, 'Conversion factor'), pmol: 1});
+  const i = Math.round(positive(insulin, 'Insulin') * conversion * 1000) / 1000;
   return calculateHoma2(g, i);
 }
 export function quicki(glucose, insulin) {

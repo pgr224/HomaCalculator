@@ -33,7 +33,7 @@ if(form){
    if(['quicki','tyg'].includes(id)&&g>600)throw new Error('Check the glucose value and selected unit. This fasting tool accepts glucose up to 600 mg/dL.');
    if(id==='quicki'&&i>1000)throw new Error('Check the insulin value and selected unit. This tool accepts insulin up to 1,000 µIU/mL.');
    if(id==='homa'){
-    const r=homa(g,i);rows=[['HOMA2-IR',fmt(r.ir)],['HOMA2-%B',fmt(r.beta,1)+'%'],['HOMA2-%S',fmt(r.sensitivity,1)+'%']];
+    const r=homa(g,value('insulin'),factor,unit('insulin'));rows=[['HOMA2-IR',fmt(r.ir)],['HOMA2-%B',fmt(r.beta,1)+'%'],['HOMA2-%S',fmt(r.sensitivity,1)+'%']];
     note='HOMA2 model estimates. No diagnostic classification is assigned.';
    }
    if(id==='quicki'){rows=[['QUICKI',fmt(quicki(g,i),4)]];note='Uses base-10 logarithms. Higher values generally indicate greater sensitivity; no diagnostic classification is assigned.';}
@@ -94,7 +94,7 @@ if(form){
    let converted;
    if(key==='a1c')converted=old==='percent'?(Number(el.value)-2.152)/0.09148:Number(el.value)*0.09148+2.152;
    else if(id==='homa'&&key==='glucose')converted=next==='mmol'?Math.round(Number(el.value)/1.8)/10:Math.round(Number(el.value)*18);
-   else if(id==='homa'&&key==='insulin')converted=next==='u'?Number((Number(el.value)/6.95).toPrecision(12)):Number((Number(el.value)*6.95).toPrecision(12));
+   else if(id==='homa'&&key==='insulin')converted=Number((Number(el.value)*factors[old]/factors[next]).toPrecision(12));
    else converted=Number(el.value)*factors[old]/factors[next];
    el.value=id==='homa'?converted:Number(converted.toPrecision(12));
   });

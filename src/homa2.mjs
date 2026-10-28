@@ -104,7 +104,7 @@ export function calculateHoma2(g, i) {
   if (!Number.isFinite(g) || g < 3 || g > 25)
     throw new Error('HOMA2 requires glucose from 54 to 450 mg/dL (3–25 mmol/L).');
   if (!Number.isFinite(i) || i < 20 || i > 400)
-    throw new Error('HOMA2 requires insulin from 20 to 400 pmol/L (20/6.95–400/6.95 µIU/mL).');
+    throw new Error('HOMA2 requires insulin from 20 to 400 pmol/L after unit conversion.');
   let gs = g, is = i;
   const gr = round1(g), ir = round1(i);
   // The original engine perturbs starting estimates in these solver regions.

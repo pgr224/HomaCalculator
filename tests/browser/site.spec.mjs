@@ -4,14 +4,61 @@ const routes=['homa-ir-calculator','quicki-calculator','tyg-index-calculator','h
 const expected=['1.29','0.3385','8.8173','154.2 mg/dL','5.000 mmol/L','60.000 pmol/L','0.596 nmol/L','53.0 mmol/mol','22.86 kg/m²','0.500'];
 test('all ten calculators run their examples without console errors',async({page})=>{const errors=[];page.on('pageerror',e=>errors.push(e.message));for(const [i,route]of routes.entries()){await page.goto(`/calculators/${route}/`);await expect(page.locator('#copy-result')).toBeDisabled();await page.getByRole('button',{name:'Load example'}).click();await expect(page.locator('#results')).toContainText(expected[i]);await expect(page.locator('#copy-result')).toBeEnabled();await page.getByRole('button',{name:'Reset',exact:true}).click();await expect(page.locator('#results')).toContainText('Enter your values');}expect(errors).toEqual([]);});
 test('HOMA requires fasting, blocks confounded samples, handles low glucose and clears stale results',async({page})=>{await page.goto('/calculators/homa-ir-calculator/');await page.locator('#glucose').fill('90');await page.locator('#insulin').fill('10');await page.getByRole('button',{name:'Calculate',exact:false}).first().click();await expect(page.locator('#form-error')).toContainText('same fasting sample');await page.locator('#fasting').check();await page.locator('button[type="submit"]').click();await expect(page.locator('#results')).toContainText('1.29');await page.locator('#glucose').fill('63');await expect(page.locator('#copy-result')).toBeDisabled();await page.locator('button[type="submit"]').click();await expect(page.locator('#results')).toContainText('HOMA2-%B');await page.locator('#glucose').fill('50');await page.locator('button[type="submit"]').click();await expect(page.locator('#form-error')).toContainText('54 to 450');await page.locator('#exogenous').check();await page.locator('button[type="submit"]').click();await expect(page.locator('#form-error')).toContainText('Injected insulin');await expect(page.locator('#results')).not.toContainText('1.29');});
-test('unit toggles preserve concentrations and result',async({page})=>{await page.goto('/calculators/homa-ir-calculator/');await page.getByRole('button',{name:'Load example'}).click();await page.locator('#glucose-unit').selectOption('mmol');await expect(page.locator('#glucose')).toHaveValue('5');await page.locator('#insulin-unit').selectOption('pmol');await expect(page.locator('#insulin')).toHaveValue('69.5');await page.locator('button[type="submit"]').click();await expect(page.locator('#results')).toContainText('1.29');});
+test('unit toggles preserve concentrations and all results for each HOMA2 factor',async({page})=>{
+ await page.goto('/calculators/homa-ir-calculator/');
+ await page.getByRole('button',{name:'Load example'}).click();
+ await page.locator('#glucose-unit').selectOption('mmol');await expect(page.locator('#glucose')).toHaveValue('5');
+ for(const [factor,pmol]of [['6','60'],['6.945','69.45'],['6.95','69.5']]){
+  await page.locator('#factor').selectOption(factor);
+  await page.locator('button[type="submit"]').click();
+  const original=await page.locator('#results strong').allTextContents();
+  await page.locator('#insulin-unit').selectOption('pmol');await expect(page.locator('#insulin')).toHaveValue(pmol);
+  await page.locator('button[type="submit"]').click();await expect(page.locator('#results strong')).toHaveText(original);
+  await page.locator('#insulin-unit').selectOption('u');await expect(page.locator('#insulin')).toHaveValue('10');
+  await page.locator('button[type="submit"]').click();await expect(page.locator('#results strong')).toHaveText(original);
+ }
+});
+test('HOMA2 factor choices change IR, beta and sensitivity and record the selected factor',async({page,context})=>{
+ await context.grantPermissions(['clipboard-read','clipboard-write']);
+ for(const route of ['/','/calculators/homa-ir-calculator/']){
+  await page.goto(route);
+  expect((await page.locator('#factor option').evaluateAll(options=>options.map(option=>option.value))).sort()).toEqual(['6','6.945','6.95']);
+  await expect(page.locator('#factor')).toHaveValue('6.95');
+  await page.locator('#glucose').fill('72');await page.locator('#insulin').fill('30');await page.locator('#fasting').check();
+  for(const [factor,expected]of [['6.95',['3.52','368.5%','28.4%']],['6',['3.06','334.3%','32.7%']],['6.945',['3.51','368.4%','28.5%']]]){
+   await page.locator('#factor').selectOption(factor);
+   await expect(page.locator('#copy-result')).toBeDisabled();await expect(page.locator('#results')).not.toContainText('HOMA2-IR');
+   await expect(page.locator('#insulin')).toHaveValue('30');
+   await page.locator('button[type="submit"]').click();await expect(page.locator('#results strong')).toHaveText(expected);
+   await expect(page.locator('#results')).toContainText(`Insulin factor: ${factor} pmol/L per µIU/mL.`);
+   await page.getByRole('button',{name:'Copy result'}).click();
+   const report=await page.evaluate(()=>navigator.clipboard.readText());
+   expect(report).toContain(`Insulin factor: ${factor} pmol/L per µIU/mL.`);
+   for(const value of expected)expect(report).toContain(value);
+  }
+  await page.getByRole('button',{name:'Reset',exact:true}).click();
+  await expect(page.locator('#factor')).toHaveValue('6.95');await expect(page.locator('#copy-result')).toBeDisabled();
+ }
+});
+test('a fixed pmol/L input gives the same HOMA2 result for every conversion factor',async({page})=>{
+ await page.goto('/calculators/homa-ir-calculator/');
+ await page.locator('#glucose').fill('72');await page.locator('#insulin-unit').selectOption('pmol');
+ await page.locator('#fasting').check();
+ for(const [glucose,insulin,expected]of [['72','208.5',['3.52','368.5%','28.4%']],['90','24.0085',['0.45','55.6%','220.8%']]])for(const factor of ['6','6.945','6.95']){
+  await page.locator('#glucose').fill(glucose);await page.locator('#insulin').fill(insulin);
+  await page.locator('#factor').selectOption(factor);await expect(page.locator('#insulin')).toHaveValue(insulin);
+  await page.locator('button[type="submit"]').click();
+  await expect(page.locator('#results strong')).toHaveText(expected);
+ }
+});
 test('HOMA2 converts glucose 92 mg/dL to 5.1 mmol/L and insulin 10 uIU/mL to 69.5 pmol/L',async({page})=>{await page.goto('/calculators/homa-ir-calculator/');await page.locator('#glucose').fill('92');await page.locator('#insulin').fill('10');await page.locator('#glucose-unit').selectOption('mmol');await expect(page.locator('#glucose')).toHaveValue('5.1');await page.locator('#insulin-unit').selectOption('pmol');await expect(page.locator('#insulin')).toHaveValue('69.5');await page.locator('#glucose-unit').selectOption('mg');await expect(page.locator('#glucose')).toHaveValue('92');await page.locator('#insulin-unit').selectOption('u');await expect(page.locator('#insulin')).toHaveValue('10');await page.locator('#fasting').check();await page.locator('button[type="submit"]').click();await expect(page.locator('#results')).toContainText('1.30');});
 test('HOMA2 boundary values survive insulin unit changes and out-of-range values clear results',async({page})=>{
  await page.goto('/calculators/homa-ir-calculator/');
  await page.locator('#glucose-unit').selectOption('mmol');
  await page.locator('#insulin-unit').selectOption('pmol');
  await page.locator('#fasting').check();
- for(const [g,i,expected]of [['3','20','0.32'],['25','400','333.33']]){
+ for(const factor of ['6','6.945','6.95'])for(const [g,i,expected]of [['3','20','0.32'],['25','400','333.33']]){
+  await page.locator('#factor').selectOption(factor);
   await page.locator('#glucose').fill(g);await page.locator('#insulin').fill(i);
   await page.locator('button[type="submit"]').click();await expect(page.locator('#results')).toContainText(expected);
   await page.locator('#insulin-unit').selectOption('u');
@@ -33,4 +80,13 @@ test('new adult tools preserve imperial units and reject unsuitable input',async
 test('a FAQ deep link clears filters that would hide its answer',async({page})=>{await page.goto('/faq/');await page.locator('#faq-search').fill('unmatched-xyz');await page.evaluate(()=>{location.hash='normal-homa';});await expect(page.locator('#normal-homa')).toBeVisible();await expect(page.locator('#normal-homa')).toHaveAttribute('open','');await expect(page.locator('#faq-search')).toHaveValue('');});
 test('forms do not submit laboratory values without JavaScript',async({browser})=>{const context=await browser.newContext({javaScriptEnabled:false});const page=await context.newPage();await page.goto('http://127.0.0.1:4173/calculators/homa-ir-calculator/');await page.locator('#glucose').fill('90');await page.locator('#insulin').fill('10');await expect(page.locator('button[type="submit"]')).toBeDisabled();const before=page.url();await page.locator('#glucose').press('Enter');expect(page.url()).toBe(before);await context.close();});
 test('reverse conversions retain their values across unit round trips',async({page})=>{for(const [route,id,unit,target,expected]of [['c-peptide-unit-converter','cpeptide','nmol','0.5958','0.596'],['hba1c-unit-converter','a1c','ifcc','52.9951902055','7.00%']]){await page.goto(`/calculators/${route}/`);await page.getByRole('button',{name:'Load example'}).click();await page.locator(`#${id}-unit`).selectOption(unit);await expect(page.locator(`#${id}`)).toHaveValue(target);await page.locator('button[type="submit"]').click();await expect(page.locator('#results')).toContainText(expected);}});
-test('insulin factor note dialogue opens, shows 6.0 vs 6.945 comparison and closes',async({page})=>{for(const route of ['/calculators/insulin-unit-converter/','/calculators/homa-ir-calculator/','/']){await page.goto(route);const dialog=page.locator('#factor-dialog');await expect(dialog).not.toBeVisible();await page.locator('[data-dialog-open="factor-dialog"]').first().click();await expect(dialog).toBeVisible();await expect(dialog).toContainText('Why Factor 6.00 Instead of 6.945?');await expect(dialog).toContainText('28.8 IU/mg');await expect(dialog).toContainText('15.75%');await page.locator('.dialog-close-btn').first().click();await expect(dialog).not.toBeVisible();}});
+test('one comprehensive insulin factor explanation opens and closes',async({page})=>{
+ for(const route of ['/calculators/insulin-unit-converter/','/calculators/homa-ir-calculator/','/']){
+  await page.goto(route);const dialog=page.locator('#factor-dialog');const trigger=page.locator('[data-dialog-open="factor-dialog"]');
+  await expect(dialog).toHaveCount(1);await expect(trigger).toHaveCount(1);await expect(dialog).not.toBeVisible();
+  await trigger.click();await expect(dialog).toBeVisible();
+  await expect(dialog.getByRole('heading',{name:'Insulin conversion factors explained',exact:true})).toHaveCount(1);
+  for(const text of ['6.0','6.945','6.95','69.5'])await expect(dialog).toContainText(text);
+  await dialog.locator('.dialog-close-btn').first().click();await expect(dialog).not.toBeVisible();
+ }
+});
