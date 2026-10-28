@@ -20,6 +20,10 @@ export function lengthCm(value, unit = 'cm') { return checked(positive(value, 'L
 export function weightKg(value, unit = 'kg') { return checked(positive(value, 'Weight') * unitFactor(unit, {kg: 1, lb: 0.45359237})); }
 export function bmi(weight, heightCm) { return checked(positive(weight, 'Weight') / (positive(heightCm, 'Height') / 100) ** 2); }
 export function waistHeightRatio(waistCm, heightCm) { return checked(positive(waistCm, 'Waist') / positive(heightCm, 'Height')); }
+export function homa1(glucose, insulin) {
+  // HOMA1-IR approximation: glucose in mg/dL and insulin in µIU/mL.
+  return checked(positive(glucose, 'Glucose') * positive(insulin, 'Insulin') / 405);
+}
 export function homa(glucose, insulin, factor = 6.95, insulinUnit = 'u') {
   // Default to mg/dL and µIU/mL; accept pmol/L directly to avoid conversion round trips.
   const gRaw = positive(glucose, 'Glucose') / GLUCOSE_FACTOR;

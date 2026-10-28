@@ -1,5 +1,7 @@
 # EndoCalc audit and implementation
 
+> Historical audit snapshot. The 28 October 2026 implementation and live deployment checks are recorded in [SEO-FIXES-2026-10-28.md](SEO-FIXES-2026-10-28.md). Earlier page/tool counts and launch tasks below describe the pre-fix site.
+
 Prepared 22 October 2026 from the supplied HTML. Planned domain: `homacalculator.com` (purchase and DNS connection remain with the owner).
 
 ## What the original draft needed

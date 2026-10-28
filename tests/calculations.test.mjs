@@ -1,7 +1,16 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {positive,glucoseMg,insulinU,homa,quicki,tyg,a1cToEag,eagToA1c,a1cToIfcc,ifccToA1c,lengthCm,weightKg,bmi,waistHeightRatio} from '../src/calculations.mjs';
+import {positive,glucoseMg,insulinU,homa,homa1,quicki,tyg,a1cToEag,eagToA1c,a1cToIfcc,ifccToA1c,lengthCm,weightKg,bmi,waistHeightRatio} from '../src/calculations.mjs';
 const near=(a,b,tolerance=1e-9)=>assert.ok(Math.abs(a-b)<tolerance,`${a} ≠ ${b}`);
+test('HOMA1 matches original formula examples and equivalent laboratory units',()=>{
+ for(const [glucose,insulin,expected]of [[81,5,1],[90,10,20/9],[126,20,56/9]])near(homa1(glucose,insulin),expected);
+ near(homa1(glucoseMg(5,'mmol'),insulinU(60,'pmol',6)),20/9);
+ assert.notEqual(homa1(90,10),homa(90,10).ir);
+});
+test('HOMA1 rejects missing, nonpositive and numerically overflowing inputs',()=>{
+ for(const input of ['',0,-1,NaN,Infinity])assert.throws(()=>homa1(input,10));
+ assert.throws(()=>homa1(90,0));assert.throws(()=>homa1(1e308,1e308));assert.throws(()=>homa1(1e-300,1e-300));
+});
 test('HOMA2 reproduces the recovered insulin model example',()=>{const r=homa(90,10);near(r.ir,100/77.3);near(r.beta,113.6);near(r.sensitivity,77.3);});
 test('HOMA2 converts glucose 92 mg/dL to 5.1 mmol/L and insulin 10 uIU/mL to 69.5 pmol/L',()=>{const r=homa(92,10);near(r.ir,100/76.9);near(r.beta,109.2);near(r.sensitivity,76.9);});
 test('glucose and insulin SI inputs retain the same HOMA2 result',()=>{near(homa(glucoseMg(5.1,'mmol'),insulinU(69.5,'pmol',6.95)).ir,homa(92,10).ir);near(homa(glucoseMg(5,'mmol'),insulinU(69.5,'pmol',6.95)).ir,homa(90,10).ir);near(insulinU(60,'pmol',6),10);near(insulinU(60,'pmol'),10);});

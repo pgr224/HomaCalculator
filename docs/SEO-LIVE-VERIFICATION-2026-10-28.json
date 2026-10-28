@@ -1,0 +1,162 @@
+{
+  "site": "https://homacalculator.com",
+  "verified_date": "2026-10-28",
+  "pages_checked": 24,
+  "sitemap_urls": 24,
+  "all_pages_200_self_canonical_indexable": true,
+  "titles_unique": true,
+  "missing_page_status": 404,
+  "robots_policy": {
+    "Googlebot": true,
+    "ChatGPT-User": false,
+    "Claude-User": false,
+    "Perplexity-User": false,
+    "GPTBot": false
+  },
+  "pages": [
+    {
+      "url": "https://homacalculator.com/",
+      "status": 200,
+      "title": "HOMA calculators: HOMA1, HOMA2 & metabolic tools | HomaCalc",
+      "indexable": true
+    },
+    {
+      "url": "https://homacalculator.com/calculators/",
+      "status": 200,
+      "title": "Metabolic calculator directory | HomaCalc",
+      "indexable": true
+    },
+    {
+      "url": "https://homacalculator.com/calculators/homa-ir-calculator/",
+      "status": 200,
+      "title": "HOMA2-IR calculator: insulin resistance, %B & %S | HomaCalc",
+      "indexable": true
+    },
+    {
+      "url": "https://homacalculator.com/calculators/quicki-calculator/",
+      "status": 200,
+      "title": "QUICKI insulin sensitivity calculator | HomaCalc",
+      "indexable": true
+    },
+    {
+      "url": "https://homacalculator.com/calculators/tyg-index-calculator/",
+      "status": 200,
+      "title": "Triglyceride\u2013glucose (TyG) index calculator | HomaCalc",
+      "indexable": true
+    },
+    {
+      "url": "https://homacalculator.com/calculators/hba1c-eag-calculator/",
+      "status": 200,
+      "title": "HbA1c to estimated average glucose calculator | HomaCalc",
+      "indexable": true
+    },
+    {
+      "url": "https://homacalculator.com/calculators/glucose-unit-converter/",
+      "status": 200,
+      "title": "Blood glucose unit converter | HomaCalc",
+      "indexable": true
+    },
+    {
+      "url": "https://homacalculator.com/calculators/insulin-unit-converter/",
+      "status": 200,
+      "title": "Insulin unit converter | HomaCalc",
+      "indexable": true
+    },
+    {
+      "url": "https://homacalculator.com/calculators/c-peptide-unit-converter/",
+      "status": 200,
+      "title": "C-peptide unit converter | HomaCalc",
+      "indexable": true
+    },
+    {
+      "url": "https://homacalculator.com/calculators/hba1c-unit-converter/",
+      "status": 200,
+      "title": "HbA1c unit converter: % to mmol/mol | HomaCalc",
+      "indexable": true
+    },
+    {
+      "url": "https://homacalculator.com/calculators/bmi-calculator/",
+      "status": 200,
+      "title": "Adult BMI calculator | HomaCalc",
+      "indexable": true
+    },
+    {
+      "url": "https://homacalculator.com/calculators/waist-to-height-ratio-calculator/",
+      "status": 200,
+      "title": "Waist-to-height ratio calculator | HomaCalc",
+      "indexable": true
+    },
+    {
+      "url": "https://homacalculator.com/calculators/homa1-ir-calculator/",
+      "status": 200,
+      "title": "HOMA-IR calculator (HOMA1) | HomaCalc",
+      "indexable": true
+    },
+    {
+      "url": "https://homacalculator.com/faq/",
+      "status": 200,
+      "title": "HOMA-IR, insulin resistance & HbA1c FAQs | HomaCalc",
+      "indexable": true
+    },
+    {
+      "url": "https://homacalculator.com/homa1-vs-homa2/",
+      "status": 200,
+      "title": "HOMA1 vs HOMA2: formulas, inputs & worked examples | HomaCalc",
+      "indexable": true
+    },
+    {
+      "url": "https://homacalculator.com/interpretation/",
+      "status": 200,
+      "title": "How to interpret HOMA-IR & metabolic calculator results | HomaCalc",
+      "indexable": true
+    },
+    {
+      "url": "https://homacalculator.com/physiology/",
+      "status": 200,
+      "title": "Glucose, insulin & C-peptide: fasting physiology | HomaCalc",
+      "indexable": true
+    },
+    {
+      "url": "https://homacalculator.com/references/",
+      "status": 200,
+      "title": "Research references & calculator citation tools | HomaCalc",
+      "indexable": true
+    },
+    {
+      "url": "https://homacalculator.com/about/",
+      "status": 200,
+      "title": "About HomaCalc: methods & editorial policy | HomaCalc",
+      "indexable": true
+    },
+    {
+      "url": "https://homacalculator.com/privacy/",
+      "status": 200,
+      "title": "HomaCalc privacy & local calculator data | HomaCalc",
+      "indexable": true
+    },
+    {
+      "url": "https://homacalculator.com/guides/",
+      "status": 200,
+      "title": "Metabolic health learning guides | HomaCalc",
+      "indexable": true
+    },
+    {
+      "url": "https://homacalculator.com/guides/homa-ir-normal-range/",
+      "status": 200,
+      "title": "HOMA-IR normal range: why cutoffs differ | HomaCalc",
+      "indexable": true
+    },
+    {
+      "url": "https://homacalculator.com/guides/fasting-insulin-vs-hba1c/",
+      "status": 200,
+      "title": "Fasting insulin vs HbA1c: what each test tells you | HomaCalc",
+      "indexable": true
+    },
+    {
+      "url": "https://homacalculator.com/guides/fasting-blood-test-preparation/",
+      "status": 200,
+      "title": "Fasting glucose and insulin test preparation | HomaCalc",
+      "indexable": true
+    }
+  ]
+}

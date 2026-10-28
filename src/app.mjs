@@ -1,4 +1,4 @@
-import {positive,glucoseMg,insulinU,homa,quicki,tyg,a1cToEag,eagToA1c,a1cToIfcc,ifccToA1c,lengthCm,weightKg,bmi,waistHeightRatio} from './calculations.mjs';
+import {positive,glucoseMg,insulinU,homa,homa1,quicki,tyg,a1cToEag,eagToA1c,a1cToIfcc,ifccToA1c,lengthCm,weightKg,bmi,waistHeightRatio} from './calculations.mjs';
 const $=s=>document.querySelector(s);
 const fmt=(v,d=2)=>{if(!Number.isFinite(v))throw new Error('This value is outside the supported numerical range. Check your input.');return Number(v).toLocaleString('en-US',{minimumFractionDigits:d,maximumFractionDigits:d});};
 const menu=$('.menu-button');
@@ -36,8 +36,9 @@ if(form){
     const r=homa(g,value('insulin'),factor,unit('insulin'));rows=[['HOMA2-IR',fmt(r.ir)],['HOMA2-%B',fmt(r.beta,1)+'%'],['HOMA2-%S',fmt(r.sensitivity,1)+'%']];
     note='HOMA2 model estimates. No diagnostic classification is assigned.';
    }
+   if(id==='homa1'){rows=[['HOMA1-IR',fmt(homa1(g,i))]];note='Original HOMA1 approximation: glucose (mg/dL) × insulin (µIU/mL) ÷ 405. This is not a HOMA2 result. No diagnostic classification is assigned.';}
    if(id==='quicki'){rows=[['QUICKI',fmt(quicki(g,i),4)]];note='Uses base-10 logarithms. Higher values generally indicate greater sensitivity; no diagnostic classification is assigned.';}
-   if(['homa','quicki'].includes(id))inputText=`Fasting glucose: ${fmt(g,3)} mg/dL; fasting insulin: ${fmt(i,3)} µIU/mL. Insulin factor: ${factor} pmol/L per µIU/mL.`;
+   if(['homa','homa1','quicki'].includes(id))inputText=`Fasting glucose: ${fmt(g,3)} mg/dL; fasting insulin: ${fmt(i,3)} µIU/mL. Insulin factor: ${factor} pmol/L per µIU/mL.`;
    if(id==='tyg'){
     const tg=positive(value('triglycerides'),'Triglycerides')*(unit('triglycerides')==='mmol'?88.57:1);
     rows=[['TyG index',fmt(tyg(g,tg),4)]];note='Convention: ln[(TG × glucose)/2], both in mg/dL. Check the formula before comparing with a study.';inputText=`Fasting glucose: ${fmt(g,3)} mg/dL; triglycerides: ${fmt(tg,3)} mg/dL.`;
@@ -103,7 +104,7 @@ if(form){
  $('#direction')?.addEventListener('change',toggleAverage);toggleAverage();
  $('#load-example').addEventListener('click',()=>{
   form.reset();
-  const samples={homa:{glucose:90,insulin:10},quicki:{glucose:90,insulin:10},tyg:{glucose:90,triglycerides:150},eag:{a1c:7},glucose:{glucose:90},insulin:{insulin:10},cpeptide:{cpeptide:1.8},a1c:{a1c:7},bmi:{height:175,weight:70},waist:{height:170,waist:85}};
+  const samples={homa:{glucose:90,insulin:10},homa1:{glucose:90,insulin:10},quicki:{glucose:90,insulin:10},tyg:{glucose:90,triglycerides:150},eag:{a1c:7},glucose:{glucose:90},insulin:{insulin:10},cpeptide:{cpeptide:1.8},a1c:{a1c:7},bmi:{height:175,weight:70},waist:{height:170,waist:85}};
   for(const [key,v]of Object.entries(samples[id]))$(`#${key}`).value=v;
   if($('#fasting'))$('#fasting').checked=true;
   if($('#adult'))$('#adult').checked=true;
